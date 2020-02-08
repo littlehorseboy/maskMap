@@ -9,6 +9,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
+    alias: { vue: 'vue/dist/vue.js' },
   },
   module: {
     rules: [
