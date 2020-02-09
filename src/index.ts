@@ -20,8 +20,13 @@ function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
     zoom: 12,
   });
 
+  // 瀏覽器抓現在位置
   navigator.geolocation.getCurrentPosition((pos) => {
     mapView.setView([pos.coords.latitude, pos.coords.longitude], 12);
+    marker([23.7698189, 120.8957000], { icon: getLeafletColorMarkers('black') })
+      .addTo(mapView)
+      .bindPopup('<h1>目前位置</h1>')
+      .openPopup();
   }, (err) => {
     console.error(err);
   }, {
@@ -41,6 +46,9 @@ function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
   })
     .then((response) => {
       const geoJSONLayer = geoJSON(response.data, {
+        pointToLayer(feature, latlng) {
+          return L.marker(latlng, { icon: getLeafletColorMarkers('black') });
+        },
         onEachFeature(feature, layer) {
           layer.bindPopup(feature.properties.name);
         },
@@ -52,15 +60,6 @@ function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
     .catch((error) => {
       console.error(error);
     });
-
-  // marker([23.7698189, 120.8957000], { icon: getLeafletColorMarkers('black') })
-  //   .addTo(mapView)
-  //   .bindPopup('<h1>哈囉</h1>')
-  //   .openPopup();
-
-  // marker([23.8698189, 120.4957000])
-  //   .addTo(mapView)
-  //   .bindPopup('<h1>哈囉 2</h1>');
 }
 
 const vm = new Vue({
