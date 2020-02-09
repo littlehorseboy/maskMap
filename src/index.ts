@@ -16,8 +16,18 @@ require('./index.scss');
 
 function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
   const mapView = map(mapDiv as string | HTMLElement, {
-    center: [23.769818923738015, 120.89570009460448],
-    zoom: 15,
+    center: [24.156547, 120.712760],
+    zoom: 12,
+  });
+
+  navigator.geolocation.getCurrentPosition((pos) => {
+    mapView.setView([pos.coords.latitude, pos.coords.longitude], 12);
+  }, (err) => {
+    console.error(err);
+  }, {
+    enableHighAccuracy: true,
+    timeout: 5000,
+    maximumAge: 0,
   });
 
   tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -43,14 +53,14 @@ function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
       console.error(error);
     });
 
-  marker([23.7698189, 120.8957000], { icon: getLeafletColorMarkers('black') })
-    .addTo(mapView)
-    .bindPopup('<h1>哈囉</h1>')
-    .openPopup();
+  // marker([23.7698189, 120.8957000], { icon: getLeafletColorMarkers('black') })
+  //   .addTo(mapView)
+  //   .bindPopup('<h1>哈囉</h1>')
+  //   .openPopup();
 
-  marker([23.8698189, 120.4957000])
-    .addTo(mapView)
-    .bindPopup('<h1>哈囉 2</h1>');
+  // marker([23.8698189, 120.4957000])
+  //   .addTo(mapView)
+  //   .bindPopup('<h1>哈囉 2</h1>');
 }
 
 const vm = new Vue({
