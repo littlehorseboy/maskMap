@@ -3,6 +3,7 @@ import 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+import './index.scss';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import L, {
   map, tileLayer, marker, geoJSON, markerClusterGroup,
@@ -11,8 +12,6 @@ import 'leaflet.markercluster';
 import Vue from 'vue';
 import Axios from 'axios';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
-
-require('./index.scss');
 
 function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
   const mapView = map(mapDiv as string | HTMLElement, {

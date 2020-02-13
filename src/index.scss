@@ -1,9 +1,15 @@
 html, body {
   width: 100%;
   height: 100%;
+  font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  
+  #app, .mapDiv {
+    width: 100%;
+    height: 100%;
+    
+    .leaflet-container {
+      font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    }
+  }
 }
 
-#app, .mapDiv {
-  width: 100%;
-  height: 100%;
-}
