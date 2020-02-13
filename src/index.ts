@@ -1,9 +1,6 @@
-import 'normalize.css';
-import 'leaflet/dist/images/marker-shadow.png';
-import 'leaflet/dist/leaflet.css';
-import 'leaflet.markercluster/dist/MarkerCluster.css';
-import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 import './index.scss';
+import './plugins/leaflet-plugins';
+import './plugins/vue-plugins';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import L, {
   map, tileLayer, marker, geoJSON, markerClusterGroup,
@@ -11,6 +8,8 @@ import L, {
 import 'leaflet.markercluster';
 import Vue from 'vue';
 import Axios from 'axios';
+import { format, getDay } from 'date-fns';
+import zhTWLocale from 'date-fns/locale/zh-TW';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
 
 function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
@@ -63,6 +62,20 @@ function initMap(mapDiv: Element | Vue | Vue[] | Element[]): void {
 
 const vm = new Vue({
   el: '#app',
+  data: {
+    currentDate: format(new Date(), 'yyyy-MM-dd'),
+    currentWeekday: format(new Date(), 'EEEE', { locale: zhTWLocale }),
+    IDCardNumber: ((): string => {
+      const currentWeekday = getDay(new Date());
+      if ([1, 3, 5].includes(currentWeekday)) {
+        return '奇數';
+      }
+      if ([2, 4, 6].includes(currentWeekday)) {
+        return '偶數';
+      }
+      return '不限';
+    })(),
+  },
   mounted(): void {
     initMap(this.$refs.mapDiv);
   },

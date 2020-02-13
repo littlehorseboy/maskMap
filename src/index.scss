@@ -1,15 +1,54 @@
+@import 'bootstrap/scss/bootstrap';
+@import 'bootstrap-vue/src/index.scss';
+
 html, body {
-  width: 100%;
-  height: 100%;
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
-  
-  #app, .mapDiv {
-    width: 100%;
-    height: 100%;
+
+  #app {
+    & > .container-fluid {
+      padding-left: 0;
+      padding-right: 0;
+    }
+
+    & .leftPane, & .mapPane, & .mapDiv {
+      height: 100vh;
+
+      @media (max-width: 575.98px) {
+        height: 50vh;
+      }
+    }
     
+    & .leftPane {
+      overflow-y: auto;
+      & .top {
+        background-image: url(./assets/images/img_bg_orange.svg);
+        background-size: cover;
+        background-position: center;
+        height: 136px;
+      }
+
+      & .search {
+        & > .input-group {
+          & > input.form-control {
+            border-right: 0;
+          }
+          & > .input-group-append {
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            border-left: 0;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            & > button {
+              padding-top: 0;
+              padding-bottom: 0;
+            }
+          }
+        }
+      }
+    }
+
     .leaflet-container {
       font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
     }
   }
 }
-
