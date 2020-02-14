@@ -21,7 +21,7 @@
           </div>
           
           <b-container class="search">
-            <b-input-group class="mt-3" placeholder="123">
+            <b-input-group class="my-3" placeholder="123">
               <template v-slot>
                 <b-form-input placeholder="搜尋區域 , 地址 , 藥局" />
               </template>
@@ -33,7 +33,45 @@
               <b-form-input></b-form-input>
             </b-input-group>
           </b-container>
+
+          <b-container>
+            <b-button @click="currentSelectedCategory = 'all'" class="navMaskAllBtn">
+              所有口罩
+            </b-button>
+            <b-button @click="currentSelectedCategory = 'adult'" class="navMaskAdultBtn">
+              成人口罩
+            </b-button>
+            <b-button @click="currentSelectedCategory = 'child'" class="navMaskChildBtn">
+              兒童口罩
+            </b-button>
+          </b-container>
+
+          <div class="searchResult">
+            <div
+              v-for="feature in featuresFilteredByCurrentSelectedCategory"
+              :key="feature.properties.id"
+              class="searchResult__featureContainer"
+            >
+              <b-container>
+                <h4>{{ feature.properties.name }}</h4>
+                <div>{{ feature.properties.address }}</div>
+                <div>營業時間｜9:00 - 22:30</div>
+                <div>
+                  <b-button v-if="feature.properties.mask_adult" variant="warning" class="maskAdultBtn">
+                    成人口罩 {{ feature.properties.mask_adult }} 個
+                  </b-button>
+                  <b-button v-if="feature.properties.mask_child" variant="warning" class="maskChildBtn">
+                    兒童口罩 {{ feature.properties.mask_child }} 個
+                  </b-button>
+                  <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
+                    口罩缺貨中
+                  </b-button>
+                </div>
+              </b-container>
+            </div>
+          </div>
         </b-col>
+
         <b-col sm="9" class="mapPane">
           <div ref="mapDiv" class="mapDiv"></div>
         </b-col>

@@ -19,7 +19,6 @@ html, body {
     }
     
     & .leftPane {
-      overflow-y: auto;
       & .top {
         background-image: url(./assets/images/img_bg_orange.svg);
         background-size: cover;
@@ -43,6 +42,27 @@ html, body {
               padding-bottom: 0;
             }
           }
+        }
+      }
+
+      
+
+      & .searchResult {
+        overflow-y: auto;
+        height: calc(100vh - 270.99px);
+
+        &__featureContainer {
+          border-top: 1px solid #EAEAEA;
+        }
+
+        & .maskAdultBtn {
+          background-color: rgba(#FF973B, 0.2);
+          color: #FF973B;
+        }
+
+        & .maskChildBtn {
+          background-color: rgba(#FFDB4D, 0.33);
+          color: #F8BE00;
         }
       }
     }
