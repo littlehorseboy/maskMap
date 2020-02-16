@@ -10,6 +10,7 @@ import 'leaflet.markercluster';
 import Vue from 'vue';
 import InfiniteLoading from 'vue-infinite-loading';
 import Axios from 'axios';
+import { isEqual } from 'lodash';
 import { format, getDay } from 'date-fns';
 import zhTWLocale from 'date-fns/locale/zh-TW';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
@@ -168,12 +169,13 @@ new Vue({
     flyToCoordinates(coordinates: [number, number]): void {
       if (this.mapView) {
         this.mapView.flyTo(coordinates, 18);
-        this.mapView.once('moveend', () => {
-          if (this.mapView) {
-            const results = leafletPip.pointInLayer(coordinates, this.geoJSONLayer);
-            debugger;
-          }
-        });
+        if (this.geoJSONLayer) {
+          this.geoJSONLayer.eachLayer((layer: any) => {
+            if (isEqual(layer.feature.geometry.coordinates, coordinates.reverse())) {
+              layer.openPopup();
+            }
+          });
+        }
       }
     },
   },
