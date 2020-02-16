@@ -34,7 +34,7 @@
           <b-container class="search">
             <b-input-group class="my-3" placeholder="123">
               <template v-slot>
-                <b-form-input placeholder="搜尋區域 , 地址 , 藥局" />
+                <b-form-input v-model="searchText" placeholder="搜尋區域 , 地址 , 藥局" />
               </template>
               <template v-slot:append>
                 <b-button variant="link">
