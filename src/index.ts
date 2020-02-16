@@ -107,7 +107,7 @@ new Vue({
         mapView.setView([pos.coords.latitude, pos.coords.longitude], 15);
         marker([pos.coords.latitude, pos.coords.longitude], { icon: getLeafletColorMarkers('red') })
           .addTo(mapView)
-          .bindPopup('<h1>目前位置</h1>')
+          .bindPopup('<h3>目前位置</h3>')
           .openPopup();
       }, (err) => {
         console.error(err);
