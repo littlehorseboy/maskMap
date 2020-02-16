@@ -64,21 +64,30 @@ new Vue({
     infiniteFeatures: [] as Feature[],
     infiniteId: +new Date(),
     currentSelectedCategory: 'all' as 'all' | 'adult' | 'child',
+    searchText: '',
   },
   computed: {
     featuresFilteredByCurrentSelectedCategory(): Feature[] {
       this.infiniteFeatures = [];
       this.infiniteId += 1;
+      let temp: Feature[] = [];
       if (this.currentSelectedCategory === 'all') {
-        return this.features;
+        temp = this.features;
+      } else if (this.currentSelectedCategory === 'adult') {
+        temp = this.features.filter((feature) => feature.properties.mask_adult);
+      } else if (this.currentSelectedCategory === 'child') {
+        temp = this.features.filter((feature) => feature.properties.mask_child);
       }
-      if (this.currentSelectedCategory === 'adult') {
-        return this.features.filter((feature) => feature.properties.mask_adult);
+
+      if (this.searchText) {
+        temp = temp
+          .filter((feature) => (
+            feature.properties.name.includes(this.searchText)
+              || feature.properties.address.includes(this.searchText)
+          ));
       }
-      if (this.currentSelectedCategory === 'child') {
-        return this.features.filter((feature) => feature.properties.mask_child);
-      }
-      return [];
+
+      return temp;
     },
   },
   mounted(): void {
