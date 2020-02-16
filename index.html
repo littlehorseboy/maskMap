@@ -46,30 +46,33 @@
             </b-button>
           </b-container>
 
-          <div class="searchResult">
-            <div
-              v-for="feature in featuresFilteredByCurrentSelectedCategory"
-              :key="feature.properties.id"
-              class="searchResult__featureContainer"
-            >
-              <b-container>
-                <h4>{{ feature.properties.name }}</h4>
-                <div>{{ feature.properties.address }}</div>
-                <div>營業時間｜9:00 - 22:30</div>
-                <div>
-                  <b-button v-if="feature.properties.mask_adult" variant="warning" class="maskAdultBtn">
-                    成人口罩 {{ feature.properties.mask_adult }} 個
-                  </b-button>
-                  <b-button v-if="feature.properties.mask_child" variant="warning" class="maskChildBtn">
-                    兒童口罩 {{ feature.properties.mask_child }} 個
-                  </b-button>
-                  <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
-                    口罩缺貨中
-                  </b-button>
-                </div>
-              </b-container>
+          <template v-if="featuresFilteredByCurrentSelectedCategory.length">
+            <div class="searchResult">
+              <div
+                v-for="feature in infiniteFeatures"
+                :key="feature.properties.id"
+                class="searchResult__featureContainer"
+              >
+                <b-container>
+                  <h4>{{ feature.properties.name }}</h4>
+                  <div>{{ feature.properties.address }}</div>
+                  <div>營業時間｜9:00 - 22:30</div>
+                  <div>
+                    <b-button v-if="feature.properties.mask_adult" variant="warning" class="maskAdultBtn">
+                      成人口罩 {{ feature.properties.mask_adult }} 個
+                    </b-button>
+                    <b-button v-if="feature.properties.mask_child" variant="warning" class="maskChildBtn">
+                      兒童口罩 {{ feature.properties.mask_child }} 個
+                    </b-button>
+                    <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
+                      口罩缺貨中
+                    </b-button>
+                  </div>
+                </b-container>
+              </div>
+              <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler"></infinite-loading>
             </div>
-          </div>
+          </template>
         </b-col>
 
         <b-col sm="9" class="mapPane">

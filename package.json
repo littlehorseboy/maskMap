@@ -54,6 +54,7 @@
     "redux-logger": "^3.0.6",
     "regenerator-runtime": "^0.13.3",
     "uuid": "^3.4.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vue-infinite-loading": "^2.4.4"
   }
 }

@@ -7,10 +7,13 @@ import L, {
 } from 'leaflet';
 import 'leaflet.markercluster';
 import Vue from 'vue';
+import InfiniteLoading from 'vue-infinite-loading';
 import Axios from 'axios';
 import { format, getDay } from 'date-fns';
 import zhTWLocale from 'date-fns/locale/zh-TW';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
+
+Vue.use(InfiniteLoading);
 
 interface Feature {
   geometry: {
@@ -54,10 +57,14 @@ new Vue({
       return '不限';
     })(),
     features: [] as Feature[],
+    infiniteFeatures: [] as Feature[],
+    infiniteId: +new Date(),
     currentSelectedCategory: '' as 'all' | 'adult' | 'child',
   },
   computed: {
     featuresFilteredByCurrentSelectedCategory(): Feature[] {
+      this.infiniteFeatures = [];
+      this.infiniteId += 1;
       if (this.currentSelectedCategory === 'all') {
         return this.features;
       }
@@ -122,6 +129,27 @@ new Vue({
         .catch((error) => {
           console.error(error);
         });
+    },
+    infiniteHandler($state: any): void {
+      setTimeout(() => {
+        const temp = [];
+        for (
+          let i = this.infiniteFeatures.length;
+          i <= 50 + this.infiniteFeatures.length;
+          i += 1
+        ) {
+          if (this.featuresFilteredByCurrentSelectedCategory[i]) {
+            temp.push(this.featuresFilteredByCurrentSelectedCategory[i]);
+          }
+        }
+        this.infiniteFeatures = this.infiniteFeatures.concat(temp);
+        $state.loaded();
+        if (
+          this.infiniteFeatures.length === this.featuresFilteredByCurrentSelectedCategory.length
+        ) {
+          $state.complete();
+        }
+      }, 1000);
     },
   },
 });
