@@ -59,7 +59,7 @@ new Vue({
     features: [] as Feature[],
     infiniteFeatures: [] as Feature[],
     infiniteId: +new Date(),
-    currentSelectedCategory: '' as 'all' | 'adult' | 'child',
+    currentSelectedCategory: 'all' as 'all' | 'adult' | 'child',
   },
   computed: {
     featuresFilteredByCurrentSelectedCategory(): Feature[] {
@@ -149,7 +149,7 @@ new Vue({
         ) {
           $state.complete();
         }
-      }, 1000);
+      }, 500);
     },
   },
 });

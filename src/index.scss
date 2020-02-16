@@ -24,6 +24,27 @@ html, body {
         background-size: cover;
         background-position: center;
         height: 136px;
+        color: white;
+
+        &__weekday {
+          font-size: 36px;
+          font-weight: bold;
+        }
+
+        &__IDCardNumber {
+          color: #000000;
+          display: inline-block;
+          background-color: rgba(255, 255, 255, 0.3);
+
+          &__span {
+            color: #C80000;
+            font-weight: bold;
+          }
+        }
+
+        &__limit {
+          font-size: 0.9rem;
+        }
       }
 
       & .search {
@@ -45,21 +66,67 @@ html, body {
         }
       }
 
+      & .navMaskBtn {
+        text-decoration: none;
+        border-color: #ced4da;
+        color: #acb1b6;
+
+        &:hover {
+          background-color: #ecedee;
+        }
+        
+        &.active {
+          background-color: #D65600;
+          color: white;
+          &:hover {
+            background-color: rgb(199, 80, 0);
+          }
+        }
+      }
+
       & .searchResult {
         overflow-y: auto;
-        height: calc(100vh - 270.99px);
+        height: calc(100vh - 260px);
 
         &__featureContainer {
           border-top: 1px solid #EAEAEA;
+          position: relative;
+
+          &.hasMask {
+            &::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 0;
+              height: 0;
+              border-top: 24px solid transparent;
+              border-right: 24px solid transparent;
+            }
+
+            &.adult {
+              &::after {
+                border-top-color: #E6541D;
+              }
+            }
+
+            &.child {
+              &::after {
+                border-top-color: #FF973B;
+              }
+            }
+          }
         }
 
         & .maskAdultBtn {
           background-color: rgba(#FF973B, 0.2);
+          border: 0;
           color: #FF973B;
         }
 
         & .maskChildBtn {
           background-color: rgba(#FFDB4D, 0.33);
+          border: 0;
           color: #F8BE00;
         }
       }
