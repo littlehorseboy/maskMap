@@ -1,3 +1,5 @@
+// https://github.com/pointhi/leaflet-color-markers
+
 import { Icon } from 'leaflet';
 
 type Color = 'blue' | 'gold' | 'red' | 'green' | 'orange' | 'yellow' | 'violet' | 'grey' | 'black';

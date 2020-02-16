@@ -98,6 +98,13 @@
                     <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
                       口罩缺貨中
                     </b-button>
+                    <b-button
+                      @click="flyToCoordinates([feature.geometry.coordinates[1], feature.geometry.coordinates[0]])"
+                      variant="warning"
+                      class='text-white float-right'
+                    >
+                      <font-awesome-icon :icon="['fas', 'map-marker-alt']" />
+                    </b-button>
                   </div>
                 </b-container>
               </div>

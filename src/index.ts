@@ -1,9 +1,10 @@
 import './index.scss';
 import './plugins/leaflet-plugins';
 import './plugins/vue-plugins';
+import './plugins/fontawesome';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import L, {
-  map, tileLayer, marker, geoJSON, markerClusterGroup,
+  map, tileLayer, marker, geoJSON, markerClusterGroup, Map, GeoJSON,
 } from 'leaflet';
 import 'leaflet.markercluster';
 import Vue from 'vue';
@@ -56,6 +57,8 @@ new Vue({
       }
       return '不限';
     })(),
+    mapView: null as Map | null,
+    geoJSONLayer: null as GeoJSON<any> | null,
     features: [] as Feature[],
     infiniteFeatures: [] as Feature[],
     infiniteId: +new Date(),
@@ -87,10 +90,12 @@ new Vue({
         zoom: 12,
       });
 
+      this.mapView = mapView;
+
       // 瀏覽器抓現在位置
       navigator.geolocation.getCurrentPosition((pos) => {
-        mapView.setView([pos.coords.latitude, pos.coords.longitude], 12);
-        marker([23.7698189, 120.8957000], { icon: getLeafletColorMarkers('black') })
+        mapView.setView([pos.coords.latitude, pos.coords.longitude], 15);
+        marker([pos.coords.latitude, pos.coords.longitude], { icon: getLeafletColorMarkers('red') })
           .addTo(mapView)
           .bindPopup('<h1>目前位置</h1>')
           .openPopup();
@@ -114,12 +119,21 @@ new Vue({
         .then((response) => {
           const geoJSONLayer = geoJSON(response.data, {
             pointToLayer(feature, latlng) {
-              return L.marker(latlng, { icon: getLeafletColorMarkers('black') });
+              if (feature.properties.mask_adult) {
+                return L.marker(latlng, { icon: getLeafletColorMarkers('orange') });
+              }
+              if (feature.properties.mask_child) {
+                return L.marker(latlng, { icon: getLeafletColorMarkers('gold') });
+              }
+              return L.marker(latlng, { icon: getLeafletColorMarkers('grey') });
             },
             onEachFeature(feature, layer) {
               layer.bindPopup(feature.properties.name);
             },
           });
+
+          this.geoJSONLayer = geoJSONLayer;
+
           const markerCluster = markerClusterGroup();
           markerCluster.addLayer(geoJSONLayer);
           mapView.addLayer(markerCluster);
@@ -150,6 +164,17 @@ new Vue({
           $state.complete();
         }
       }, 500);
+    },
+    flyToCoordinates(coordinates: [number, number]): void {
+      if (this.mapView) {
+        this.mapView.flyTo(coordinates, 18);
+        this.mapView.once('moveend', () => {
+          if (this.mapView) {
+            const results = leafletPip.pointInLayer(coordinates, this.geoJSONLayer);
+            debugger;
+          }
+        });
+      }
     },
   },
 });
