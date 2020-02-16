@@ -6,18 +6,29 @@
   <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>口罩地圖</title>
+  <style>
+    [v-cloak] {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
   <div id="app">
     <b-container fluid>
       <b-row no-gutters>
-        <b-col sm="3" class="leftPane">
+        <b-col v-cloak sm="3" class="leftPane">
           <div class="top">
-            <div>{{ currentDate }}</div>
-            <div>{{ currentWeekday }}</div>
-            <div>身分證末一碼 {{ IDCardNumber }} 字號者可購買口罩</div>
-            <div>※一週限購一次，每次一人限購兩片</div>
+            <b-container class="pt-1">
+              <div>{{ currentDate }}</div>
+              <div class="top__weekday">{{ currentWeekday }}</div>
+              <div class="top__IDCardNumber">
+                身分證末一碼
+                <span class="top__IDCardNumber__span">{{ IDCardNumber }}</span>
+                字號者可購買口罩
+              </div>
+              <div class="top__limit">※一週限購一次，每次一人限購兩片</div>
+            </b-container>
           </div>
           
           <b-container class="search">
@@ -34,42 +45,65 @@
             </b-input-group>
           </b-container>
 
-          <b-container>
-            <b-button @click="currentSelectedCategory = 'all'" class="navMaskAllBtn">
+          <b-container class="pb-3">
+            <b-button
+              @click="currentSelectedCategory = 'all'"
+              :class="{ active: currentSelectedCategory === 'all' }"
+              class="navMaskBtn"
+              variant="link"
+            >
               所有口罩
             </b-button>
-            <b-button @click="currentSelectedCategory = 'adult'" class="navMaskAdultBtn">
+            <b-button
+              @click="currentSelectedCategory = 'adult'"
+              :class="{ active: currentSelectedCategory === 'adult' }"
+              class="navMaskBtn"
+              variant="link"
+            >
               成人口罩
             </b-button>
-            <b-button @click="currentSelectedCategory = 'child'" class="navMaskChildBtn">
+            <b-button
+              @click="currentSelectedCategory = 'child'"
+              :class="{ active: currentSelectedCategory === 'child' }"
+              class="navMaskBtn"
+              variant="link"
+            >
               兒童口罩
             </b-button>
           </b-container>
 
-          <div class="searchResult">
-            <div
-              v-for="feature in featuresFilteredByCurrentSelectedCategory"
-              :key="feature.properties.id"
-              class="searchResult__featureContainer"
-            >
-              <b-container>
-                <h4>{{ feature.properties.name }}</h4>
-                <div>{{ feature.properties.address }}</div>
-                <div>營業時間｜9:00 - 22:30</div>
-                <div>
-                  <b-button v-if="feature.properties.mask_adult" variant="warning" class="maskAdultBtn">
-                    成人口罩 {{ feature.properties.mask_adult }} 個
-                  </b-button>
-                  <b-button v-if="feature.properties.mask_child" variant="warning" class="maskChildBtn">
-                    兒童口罩 {{ feature.properties.mask_child }} 個
-                  </b-button>
-                  <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
-                    口罩缺貨中
-                  </b-button>
-                </div>
-              </b-container>
+          <template v-if="featuresFilteredByCurrentSelectedCategory.length">
+            <div class="searchResult">
+              <div
+                v-for="feature in infiniteFeatures"
+                :key="feature.properties.id"
+                :class="{
+                  hasMask: feature.properties.mask_adult + feature.properties.mask_child,
+                  adult: feature.properties.mask_adult,
+                  child: feature.properties.mask_child,
+                }"
+                class="searchResult__featureContainer"
+              >
+                <b-container class="py-3">
+                  <h4 class="font-weight-bold">{{ feature.properties.name }}</h4>
+                  <div>{{ feature.properties.address }}</div>
+                  <div>營業時間｜9:00 - 22:30</div>
+                  <div class="pt-1">
+                    <b-button v-if="feature.properties.mask_adult" variant="warning" class="maskAdultBtn">
+                      成人口罩 {{ feature.properties.mask_adult }} 個
+                    </b-button>
+                    <b-button v-if="feature.properties.mask_child" variant="warning" class="maskChildBtn">
+                      兒童口罩 {{ feature.properties.mask_child }} 個
+                    </b-button>
+                    <b-button v-if="!(feature.properties.mask_adult + feature.properties.mask_child)" variant="secondary">
+                      口罩缺貨中
+                    </b-button>
+                  </div>
+                </b-container>
+              </div>
+              <infinite-loading :identifier="infiniteId" @infinite="infiniteHandler"></infinite-loading>
             </div>
-          </div>
+          </template>
         </b-col>
 
         <b-col sm="9" class="mapPane">
