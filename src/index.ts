@@ -42,8 +42,7 @@ interface Feature {
   type: string;
 }
 
-// eslint-disable-next-line no-new
-new Vue({
+const vm = new Vue({
   el: '#app',
   data: {
     currentDate: format(new Date(), 'yyyy-MM-dd'),
@@ -65,6 +64,8 @@ new Vue({
     infiniteId: +new Date(),
     currentSelectedCategory: 'all' as 'all' | 'adult' | 'child',
     searchText: '',
+    modalShow: false,
+    modalByFeature: {} as Feature,
   },
   computed: {
     featuresFilteredByCurrentSelectedCategory(): Feature[] {
@@ -144,7 +145,7 @@ new Vue({
                 <div>營業時間｜9:00 - 22:30</div>
                 <div>連絡電話｜${feature.properties.phone}</div>
                 <div class="text-muted">資訊更新於 ${formatDistanceToNow(new Date(feature.properties.updated), { locale: zhTWLocale })}前</div>
-                <div class="py-1">
+                <div class="py-2">
                   ${feature.properties.mask_adult ? `<button class="btn btn-warning maskAdultBtn">
                     成人口罩 ${feature.properties.mask_adult} 個
                   </button>` : ''}
@@ -155,6 +156,12 @@ new Vue({
                     口罩缺貨中 ${feature.properties.mask_adult} 個
                   </button>` : ''}
                 </div>
+                <button
+                  class="btn btn-info btn-block text-white"
+                  onClick="openModal('${feature.properties.id}')"
+                >
+                  詳細資訊
+                </button>
                 <a
                   href="http://maps.google.com/?q=${(feature.geometry as any).coordinates[1]},${(feature.geometry as any).coordinates[0]}"
                   target="_blank"
@@ -220,5 +227,18 @@ new Vue({
         });
       }
     },
+    setModalByFeature(propertiesID: string): void {
+      const foundFeature = this.features.find((feature) => feature.properties.id === propertiesID);
+      if (foundFeature) {
+        this.modalByFeature = foundFeature;
+      }
+    },
   },
 });
+
+function openModal(propertiesID: string): void {
+  vm.modalShow = true;
+  vm.setModalByFeature(propertiesID);
+}
+
+Object.assign(window, { openModal });

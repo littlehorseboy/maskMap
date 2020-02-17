@@ -118,6 +118,37 @@
         </b-col>
       </b-row>
     </b-container>
+
+    <b-modal v-cloak v-model="modalShow" hide-footer>
+      <b-container v-if="modalByFeature.properties">
+        <b-row class="pt-2">
+          <b-col>
+            <h3>
+              {{ modalByFeature.properties.name }}
+              詳細資訊
+            </h3>
+          </b-col>
+        </b-row>
+        <b-row class="pt-2">
+          <b-col sm="3">
+            營業時間
+          </b-col>
+          <b-col sm="9">
+            {{ modalByFeature.properties.available }}
+          </b-col>
+        </b-row>
+        <b-row class="pt-2">
+          <b-col sm="3">
+            備註
+          </b-col>
+          <b-col sm="9">
+            {{ modalByFeature.properties.note }}
+            <br />
+            {{ modalByFeature.properties.custom_note }}
+          </b-col>
+        </b-row>
+      </b-container>
+    </b-modal>
   </div>
 </body>
 
