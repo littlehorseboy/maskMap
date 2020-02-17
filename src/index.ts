@@ -107,7 +107,7 @@ new Vue({
         mapView.setView([pos.coords.latitude, pos.coords.longitude], 15);
         marker([pos.coords.latitude, pos.coords.longitude], { icon: getLeafletColorMarkers('red') })
           .addTo(mapView)
-          .bindPopup('<h3>目前位置</h3>')
+          .bindPopup('<h4>目前位置</h4>')
           .openPopup();
       }, (err) => {
         console.error(err);
@@ -180,6 +180,16 @@ new Vue({
         this.mapView.flyTo(coordinates, 18);
         if (this.geoJSONLayer) {
           this.geoJSONLayer.eachLayer((layer: any) => {
+            // const from = point(
+            //   [layer.feature.geometry.coordinates[0], layer.feature.geometry.coordinates[1]],
+            // );
+            // const to = point([coordinates[1], coordinates[0]]);
+            // const options = { units: 'miles' };
+
+            // const distanceResult = distance(from, to, options);
+            // if (distanceResult < 5) {
+            //   layer.openPopup();
+            // }
             if (isEqual(layer.feature.geometry.coordinates, coordinates.reverse())) {
               layer.openPopup();
             }

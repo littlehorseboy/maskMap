@@ -13,8 +13,17 @@ html, body {
     & .leftPane, & .mapPane, & .mapDiv {
       height: 100vh;
 
+    }
+
+    & .leftPane {
       @media (max-width: 575.98px) {
-        height: 50vh;
+        height: 65vh;
+      }
+    }
+
+    & .mapPane, & .mapDiv {
+      @media (max-width: 575.98px) {
+        height: 35vh;
       }
     }
     
