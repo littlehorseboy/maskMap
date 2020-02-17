@@ -15,9 +15,6 @@
   "devDependencies": {
     "@types/leaflet": "^1.5.8",
     "@types/leaflet.markercluster": "^1.4.2",
-    "@types/lodash": "^4.14.149",
-    "@types/redux-logger": "^3.0.7",
-    "@types/uuid": "^3.4.7",
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -55,12 +52,7 @@
     "intersection-observer": "^0.7.0",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",
-    "lodash": "^4.17.15",
-    "normalize.css": "^8.0.1",
-    "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
     "regenerator-runtime": "^0.13.3",
-    "uuid": "^3.4.0",
     "vue": "^2.6.11",
     "vue-infinite-loading": "^2.4.4"
   }
