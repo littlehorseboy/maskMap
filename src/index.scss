@@ -5,6 +5,18 @@ html, body {
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
 
   #app {
+    & button.maskAdultBtn {
+      background-color: rgba(#FF973B, 0.2);
+      border: 0;
+      color: #FF973B;
+    }
+
+    & button.maskChildBtn {
+      background-color: rgba(#FFDB4D, 0.33);
+      border: 0;
+      color: #F8BE00;
+    }
+
     & > .container-fluid {
       padding-left: 0;
       padding-right: 0;
@@ -125,18 +137,6 @@ html, body {
               }
             }
           }
-        }
-
-        & .maskAdultBtn {
-          background-color: rgba(#FF973B, 0.2);
-          border: 0;
-          color: #FF973B;
-        }
-
-        & .maskChildBtn {
-          background-color: rgba(#FFDB4D, 0.33);
-          border: 0;
-          color: #F8BE00;
         }
       }
     }

@@ -7,11 +7,11 @@ import L, {
   map, tileLayer, marker, geoJSON, markerClusterGroup, Map, GeoJSON,
 } from 'leaflet';
 import 'leaflet.markercluster';
+import { point, distance } from '@turf/turf';
 import Vue from 'vue';
 import InfiniteLoading from 'vue-infinite-loading';
 import Axios from 'axios';
-import { isEqual } from 'lodash';
-import { format, getDay } from 'date-fns';
+import { format, getDay, formatDistanceToNow } from 'date-fns';
 import zhTWLocale from 'date-fns/locale/zh-TW';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
 
@@ -138,7 +138,31 @@ new Vue({
               return L.marker(latlng, { icon: getLeafletColorMarkers('grey') });
             },
             onEachFeature(feature, layer) {
-              layer.bindPopup(feature.properties.name);
+              layer.bindPopup(`
+                <h4 class="font-weight-bold">${feature.properties.name}</h4>
+                <div>${feature.properties.address}</div>
+                <div>營業時間｜9:00 - 22:30</div>
+                <div>連絡電話｜${feature.properties.phone}</div>
+                <div class="text-muted">資訊更新於 ${formatDistanceToNow(new Date(feature.properties.updated), { locale: zhTWLocale })}前</div>
+                <div class="py-1">
+                  ${feature.properties.mask_adult ? `<button class="btn btn-warning maskAdultBtn">
+                    成人口罩 ${feature.properties.mask_adult} 個
+                  </button>` : ''}
+                  ${feature.properties.mask_child ? `<button class="btn btn-warning maskChildBtn">
+                    兒童口罩 ${feature.properties.mask_child} 個
+                  </button>` : ''}
+                  ${!(feature.properties.mask_adult + feature.properties.mask_child) ? `<button class="btn btn-secondary">
+                    口罩缺貨中 ${feature.properties.mask_adult} 個
+                  </button>` : ''}
+                </div>
+                <a
+                  href="http://maps.google.com/?q=${(feature.geometry as any).coordinates[1]},${(feature.geometry as any).coordinates[0]}"
+                  target="_blank"
+                  class="btn btn-success btn-block text-white"
+                >
+                  Google 路線導航
+                </a>
+              `);
             },
           });
 
@@ -178,23 +202,22 @@ new Vue({
     flyToCoordinates(coordinates: [number, number]): void {
       if (this.mapView) {
         this.mapView.flyTo(coordinates, 18);
-        if (this.geoJSONLayer) {
-          this.geoJSONLayer.eachLayer((layer: any) => {
-            // const from = point(
-            //   [layer.feature.geometry.coordinates[0], layer.feature.geometry.coordinates[1]],
-            // );
-            // const to = point([coordinates[1], coordinates[0]]);
-            // const options = { units: 'miles' };
 
-            // const distanceResult = distance(from, to, options);
-            // if (distanceResult < 5) {
-            //   layer.openPopup();
-            // }
-            if (isEqual(layer.feature.geometry.coordinates, coordinates.reverse())) {
-              layer.openPopup();
-            }
-          });
-        }
+        this.mapView.once('moveend', () => {
+          if (this.geoJSONLayer) {
+            this.geoJSONLayer.eachLayer((layer: any) => {
+              const from = point(
+                [layer.feature.geometry.coordinates[0], layer.feature.geometry.coordinates[1]],
+              );
+              const to = point([coordinates[1], coordinates[0]]);
+
+              const distanceResult = distance(from, to, { units: 'meters' });
+              if (distanceResult < 1) {
+                layer.openPopup();
+              }
+            });
+          }
+        });
       }
     },
   },
