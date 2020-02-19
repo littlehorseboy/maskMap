@@ -91,6 +91,49 @@ const vm = new Vue({
 
       return temp;
     },
+    availables(): [string[], string[], string[]] {
+      const availableArray = this.modalByFeature.properties.available.split('、');
+      const mappedavailableArray = availableArray.map((str) => ({
+        weekday: str.slice(0, 3),
+        period: str.slice(3, 5),
+        onOff: str.slice(5, 7) === '看診' ? 'o' : 'x',
+      }));
+      const weekdays = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+      const morningAvailable = weekdays.map((weekday) => {
+        const filteredArray = mappedavailableArray.filter((available) => available.period === '上午');
+        let selectedResult = 'x';
+        for (let i = 0; i < filteredArray.length; i += 1) {
+          if (filteredArray[i].weekday === weekday) {
+            selectedResult = filteredArray[i].onOff;
+            break;
+          }
+        }
+        return selectedResult;
+      });
+      const afternoonAvailable = weekdays.map((weekday) => {
+        const filteredArray = mappedavailableArray.filter((available) => available.period === '下午');
+        let selectedResult = 'x';
+        for (let i = 0; i < filteredArray.length; i += 1) {
+          if (filteredArray[i].weekday === weekday) {
+            selectedResult = filteredArray[i].onOff;
+            break;
+          }
+        }
+        return selectedResult;
+      });
+      const eveningAvailable = weekdays.map((weekday) => {
+        const filteredArray = mappedavailableArray.filter((available) => available.period === '晚上');
+        let selectedResult = 'x';
+        for (let i = 0; i < filteredArray.length; i += 1) {
+          if (filteredArray[i].weekday === weekday) {
+            selectedResult = filteredArray[i].onOff;
+            break;
+          }
+        }
+        return selectedResult;
+      });
+      return [morningAvailable, afternoonAvailable, eveningAvailable];
+    },
   },
   mounted(): void {
     this.initMap(this.$refs.mapDiv);
