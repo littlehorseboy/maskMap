@@ -131,7 +131,7 @@
       </b-row>
     </b-container>
 
-    <b-modal v-cloak v-model="modalShow" hide-footer>
+    <b-modal v-cloak v-model="modalShow" hide-footer centered>
       <b-container v-if="modalByFeature.properties">
         <b-row class="pt-2">
           <b-col>
@@ -142,11 +142,41 @@
           </b-col>
         </b-row>
         <b-row class="pt-2">
-          <b-col sm="3">
-            營業時間
-          </b-col>
-          <b-col sm="9">
-            {{ modalByFeature.properties.available }}
+          <b-col sm="12">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-nowrap" scope="col">營業時間</th>
+                  <th scope="col">一</th>
+                  <th scope="col">二</th>
+                  <th scope="col">三</th>
+                  <th scope="col">四</th>
+                  <th scope="col">五</th>
+                  <th scope="col">六</th>
+                  <th scope="col">日</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">上午</th>
+                  <td v-for="weekdaysAvailable in availables[0]">
+                    {{ weekdaysAvailable }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">下午</th>
+                  <td v-for="weekdaysAvailable in availables[1]">
+                    {{ weekdaysAvailable }}
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">晚上</th>
+                  <td v-for="weekdaysAvailable in availables[2]">
+                    {{ weekdaysAvailable }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </b-col>
         </b-row>
         <b-row class="pt-2">
