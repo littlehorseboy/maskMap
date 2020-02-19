@@ -16,7 +16,7 @@
 <body>
   <div id="app">
     <b-container fluid>
-      <div class="visibleForLeftPaneBtnContainer">
+      <div v-cloak class="visibleForLeftPaneBtnContainer">
         <button
           @click="leftPaneVisible = !leftPaneVisible"
           :class="{ ['is-active']: leftPaneVisible }"
