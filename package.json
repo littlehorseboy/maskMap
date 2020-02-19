@@ -49,6 +49,7 @@
     "bootstrap-vue": "^2.4.1",
     "core-js": "^3.6.4",
     "date-fns": "^2.9.0",
+    "hamburgers": "^1.1.3",
     "intersection-observer": "^0.7.0",
     "leaflet": "^1.6.0",
     "leaflet.markercluster": "^1.4.1",

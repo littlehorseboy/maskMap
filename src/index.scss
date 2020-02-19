@@ -1,5 +1,6 @@
 @import 'bootstrap/scss/bootstrap';
 @import 'bootstrap-vue/src/index.scss';
+@import 'hamburgers/_sass/hamburgers/hamburgers.scss';
 
 html, body {
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
@@ -17,6 +18,18 @@ html, body {
       color: #F8BE00;
     }
 
+    & .visibleForLeftPaneBtnContainer {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 8000;
+      display: none;
+
+      @media (max-width: 575.98px) {
+        display: block;
+      }
+    }
+
     & > .container-fluid {
       padding-left: 0;
       padding-right: 0;
@@ -24,22 +37,24 @@ html, body {
 
     & .leftPane, & .mapPane, & .mapDiv {
       height: 100vh;
-
     }
 
     & .leftPane {
       @media (max-width: 575.98px) {
-        height: 65vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        &.hidden {
+          display: none;
+        }
       }
     }
 
-    & .mapPane, & .mapDiv {
-      @media (max-width: 575.98px) {
-        height: 35vh;
-      }
-    }
-    
     & .leftPane {
+      background-color: white;
+      z-index: 7999;
+
       & .top {
         background-image: url(./assets/images/img_bg_orange.svg);
         background-size: cover;

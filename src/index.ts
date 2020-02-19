@@ -66,6 +66,7 @@ const vm = new Vue({
     searchText: '',
     modalShow: false,
     modalByFeature: {} as Feature,
+    leftPaneVisible: true,
   },
   computed: {
     featuresFilteredByCurrentSelectedCategory(): Feature[] {
@@ -208,6 +209,8 @@ const vm = new Vue({
     },
     flyToCoordinates(coordinates: [number, number]): void {
       if (this.mapView) {
+        this.leftPaneVisible = false;
+
         this.mapView.flyTo(coordinates, 18);
 
         this.mapView.once('moveend', () => {

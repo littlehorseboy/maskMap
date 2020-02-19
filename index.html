@@ -16,8 +16,20 @@
 <body>
   <div id="app">
     <b-container fluid>
+      <div class="visibleForLeftPaneBtnContainer">
+        <button
+          @click="leftPaneVisible = !leftPaneVisible"
+          :class="{ ['is-active']: leftPaneVisible }"
+          class="hamburger hamburger--collapse"
+          type="button"
+        >
+          <span class="hamburger-box">
+            <span class="hamburger-inner"></span>
+          </span>
+        </button>
+      </div>
       <b-row no-gutters>
-        <b-col v-cloak sm="3" class="leftPane">
+        <b-col v-cloak sm="3" :class="{ hidden: !leftPaneVisible }" class="leftPane">
           <div class="top">
             <b-container class="pt-1">
               <div>{{ currentDate }}</div>
@@ -32,7 +44,7 @@
           </div>
           
           <b-container class="search">
-            <b-input-group class="my-3" placeholder="123">
+            <b-input-group class="my-3">
               <template v-slot>
                 <b-form-input v-model="searchText" placeholder="搜尋區域 , 地址 , 藥局" />
               </template>
