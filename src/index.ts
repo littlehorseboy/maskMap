@@ -11,7 +11,7 @@ import { point, distance } from '@turf/turf';
 import Vue from 'vue';
 import InfiniteLoading from 'vue-infinite-loading';
 import Axios from 'axios';
-import { format, getDay, formatDistanceToNow } from 'date-fns';
+import { format, getDay, formatDistanceToNow, isValid } from 'date-fns';
 import zhTWLocale from 'date-fns/locale/zh-TW';
 import { getLeafletColorMarkers } from './assets/ts/leaflet-color-markers';
 
@@ -183,37 +183,71 @@ const vm = new Vue({
               return L.marker(latlng, { icon: getLeafletColorMarkers('grey') });
             },
             onEachFeature(feature, layer) {
-              layer.bindPopup(`
-                <h4 class="font-weight-bold">${feature.properties.name}</h4>
-                <div>${feature.properties.address}</div>
-                <div>營業時間｜9:00 - 22:30</div>
-                <div>連絡電話｜${feature.properties.phone}</div>
-                <div class="text-muted">資訊更新於 ${formatDistanceToNow(new Date(feature.properties.updated), { locale: zhTWLocale })}前</div>
-                <div class="py-2">
-                  ${feature.properties.mask_adult ? `<button class="btn btn-warning maskAdultBtn">
-                    成人口罩 ${feature.properties.mask_adult} 個
-                  </button>` : ''}
-                  ${feature.properties.mask_child ? `<button class="btn btn-warning maskChildBtn">
-                    兒童口罩 ${feature.properties.mask_child} 個
-                  </button>` : ''}
-                  ${!(feature.properties.mask_adult + feature.properties.mask_child) ? `<button class="btn btn-secondary">
-                    口罩缺貨中 ${feature.properties.mask_adult} 個
-                  </button>` : ''}
-                </div>
-                <button
-                  class="btn btn-info btn-block text-white"
-                  onClick="openModal('${feature.properties.id}')"
-                >
-                  詳細資訊
-                </button>
-                <a
-                  href="http://maps.google.com/?q=${(feature.geometry as any).coordinates[1]},${(feature.geometry as any).coordinates[0]}"
-                  target="_blank"
-                  class="btn btn-success btn-block text-white"
-                >
-                  Google 路線導航
-                </a>
-              `);
+              if (isValid(new Date(feature.properties.updated))) {
+                layer.bindPopup(`
+                  <h4 class="font-weight-bold">${feature.properties.name}</h4>
+                  <div>${feature.properties.address}</div>
+                  <div>營業時間｜9:00 - 22:30</div>
+                  <div>連絡電話｜${feature.properties.phone}</div>
+                  <div class="text-muted">資訊更新於 ${formatDistanceToNow(new Date(feature.properties.updated), { locale: zhTWLocale })}前</div>
+                  <div class="py-2">
+                    ${feature.properties.mask_adult ? `<button class="btn btn-warning maskAdultBtn">
+                      成人口罩 ${feature.properties.mask_adult} 個
+                    </button>` : ''}
+                    ${feature.properties.mask_child ? `<button class="btn btn-warning maskChildBtn">
+                      兒童口罩 ${feature.properties.mask_child} 個
+                    </button>` : ''}
+                    ${!(feature.properties.mask_adult + feature.properties.mask_child) ? `<button class="btn btn-secondary">
+                      口罩缺貨中 ${feature.properties.mask_adult} 個
+                    </button>` : ''}
+                  </div>
+                  <button
+                    class="btn btn-info btn-block text-white"
+                    onClick="openModal('${feature.properties.id}')"
+                  >
+                    詳細資訊
+                  </button>
+                  <a
+                    href="http://maps.google.com/?q=${(feature.geometry as any).coordinates[1]},${(feature.geometry as any).coordinates[0]}"
+                    target="_blank"
+                    class="btn btn-success btn-block text-white"
+                  >
+                    Google 路線導航
+                  </a>
+                `);
+              } else {
+                layer.bindPopup(`
+                  <h4 class="font-weight-bold">${feature.properties.name}</h4>
+                  <div>${feature.properties.address}</div>
+                  <div>營業時間｜9:00 - 22:30</div>
+                  <div>連絡電話｜${feature.properties.phone}</div>
+                  <div class="text-muted">無紀錄</div>
+                  <div class="py-2">
+                    ${feature.properties.mask_adult ? `<button class="btn btn-warning maskAdultBtn">
+                      成人口罩 ${feature.properties.mask_adult} 個
+                    </button>` : ''}
+                    ${feature.properties.mask_child ? `<button class="btn btn-warning maskChildBtn">
+                      兒童口罩 ${feature.properties.mask_child} 個
+                    </button>` : ''}
+                    ${!(feature.properties.mask_adult + feature.properties.mask_child) ? `<button class="btn btn-secondary">
+                      口罩缺貨中 ${feature.properties.mask_adult} 個
+                    </button>` : ''}
+                  </div>
+                  <button
+                    class="btn btn-info btn-block text-white"
+                    onClick="openModal('${feature.properties.id}')"
+                  >
+                    詳細資訊
+                  </button>
+                  <a
+                    href="http://maps.google.com/?q=${(feature.geometry as any).coordinates[1]},${(feature.geometry as any).coordinates[0]}"
+                    target="_blank"
+                    class="btn btn-success btn-block text-white"
+                  >
+                    Google 路線導航
+                  </a>
+                `);
+              }
             },
           });
 
